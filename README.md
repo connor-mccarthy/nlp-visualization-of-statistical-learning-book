@@ -1,4 +1,4 @@
-# Statistical Learning Language Clustering
+# Language Clustering of Statistical Learning Books
 
 HDBSCAN (Hierarchical Density-Based Spatial Clustering of Applications with Noise) on the text of the canonical machine learning books "An Introduction to Statistical Learning" and "The Elements of Statistical Learning".
 
