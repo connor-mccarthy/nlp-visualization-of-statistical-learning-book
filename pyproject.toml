@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "statistical-learning-language-clustering"
+version = "0.1.0"
+description = ""
+authors = ["Connor McCarthy <mccarthy.connor.james@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.7.1,<4.0"
+spacy = "^3.0.1"
+pandas = "^1.2.1"
+hdbscan = "^0.8.27"
+plotly = "^4.14.3"
+sklearn = "^0.0"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.8.4"
+pre-commit = "^2.10.1"
+black = "^20.8b1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.dephell.main]
+from = {format = "poetry", path = "pyproject.toml"}
+to = {format = "pip", path = "requirements.txt"}

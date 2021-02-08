@@ -1,0 +1,33 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: local
+    hooks:
+    - id: flake8
+      name: flake8
+      language: system
+      entry: flake8
+      types: [python]
+      stages: [commit]
+    - id: black
+      language: python
+      language_version: python3.7
+      name: black
+      entry: black
+      types: [python]
+      stages: [commit]
+    - id: mypy
+      language: python
+      language_version: python3.7
+      name: mypy
+      entry: mypy
+      types: [python]
+      stages: [commit]
+    - id: deps_to_requirements
+      language: python
+      language_version: python3.7
+      name: dephell deps convert
+      entry: bash -c 'dephell deps convert'
+      pass_filenames: false
+      stages: [commit]
+
