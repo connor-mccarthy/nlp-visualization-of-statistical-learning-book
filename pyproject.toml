@@ -21,6 +21,7 @@ pytesseract = "^0.3.7"
 en-core-web-lg = {url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-2.3.1/en_core_web_lg-2.3.1.tar.gz"}
 nbformat = "^5.1.2"
 wordfreq = "^2.4.2"
+nltk = "^3.5"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.4"

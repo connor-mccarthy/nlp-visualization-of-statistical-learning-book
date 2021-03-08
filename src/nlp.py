@@ -5,8 +5,6 @@ import spacy
 from spacy.tokens.token import Token
 from wordfreq import word_frequency
 
-from config import STOP_WORDS
-
 nlp = spacy.load("en_core_web_lg", disable=["ner", "parser"])
 nlp.max_length = 2_000_000
 
@@ -45,8 +43,9 @@ def lemmatize_tokens(tokens: Token) -> Token:
     return [token for token in doc]
 
 
-def get_noun_tokens(text: str) -> List[Token]:
-    nlp.Defaults.stop_words.update(STOP_WORDS)
+def get_noun_tokens(text: str, downsample_factor: int = 1) -> List[Token]:
     doc = nlp(text.lower())
     nouns = [token for token in doc if token.pos_ == "NOUN"]
-    return [token for token in nouns if all(func(token) for func in filter_funcs)]
+    return [token for token in nouns if all(func(token) for func in filter_funcs)][
+        ::downsample_factor
+    ]
