@@ -1,16 +1,24 @@
+# %%
+from joblib import Memory
+
 from clustering import cluster_topics
-from data import get_text_from_url
-from plotting import get_plot_df
-from vectorize import get_noun_tokens
+from data import read_text_from_txt
+from nlp import get_noun_tokens
+from plotting import get_plot_df, plot
 
+text = read_text_from_txt("statistical_learning.txt")[:1_000_000]
+nouns = get_noun_tokens(text)
 
-def main():  # type: ignore
-    book_url = "http://www.africau.edu/images/default/sample.pdf"
-    pages = get_text_from_url(book_url)
-    nouns = get_noun_tokens(pages)
-    clusterer = cluster_topics(nouns)
-    return get_plot_df(clusterer, nouns)
+# %%
+clustering_params = {
+    "min_cluster_size": 100,
+    "min_samples": 100,
+    "cluster_selection_epsilon": 0,
+    "memory": Memory(".cache"),
+}
+clusterer = cluster_topics(nouns, clustering_params)
 
-
-if __name__ == "__main__":
-    print(main())  # type: ignore
+# %%
+df = get_plot_df(clusterer, nouns, add_noise=False)
+fig = plot(df, plot_noise=False)
+fig.show()

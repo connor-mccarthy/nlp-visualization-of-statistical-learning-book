@@ -1,1 +1,3 @@
-NLP_STOP_WORDS = set()  # type: ignore
+from typing import Set
+
+STOP_WORDS: Set[str] = set()

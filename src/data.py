@@ -1,4 +1,5 @@
 import io
+import os
 from typing import List
 
 import pdf2image
@@ -6,7 +7,10 @@ import PIL
 import pytesseract
 import requests
 
+from caching import cache
 
+
+@cache
 def get_pdf(url: str) -> bytes:
     r = requests.get(url)
     if r.status_code == 200:
@@ -35,7 +39,7 @@ def save_list_of_pil_images(list_of_pil_images: List, output_mime: str) -> io.By
     return img_byte_arr
 
 
-def convert_image_to_string(png_bytes: bytes) -> List[str]:
+def convert_image_to_string(png_bytes: bytes) -> str:
     replacements = {"\n": " ", "\x0c": "", "  ": " "}
 
     pages = {}
@@ -47,10 +51,27 @@ def convert_image_to_string(png_bytes: bytes) -> List[str]:
         text = text.strip()
         image.seek(page)
         pages[page] = text
-    return list(pages.values())
+    page_list = list(pages.values())
+    return " ".join(page_list)
 
 
-def get_text_from_url(url: str) -> List[str]:
+def write_text_to_txt(text: str, file: str) -> None:
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    filepath = os.path.join(current_directory, file)
+    with open(filepath, "w+") as f:
+        f.write(text)
+    print(f"Text written to {filepath}.")
+
+
+def read_text_from_txt(file: str) -> str:
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    filepath = os.path.join(current_directory, file)
+    with open(filepath, "r+") as f:
+        text = f.read()
+    return text
+
+
+def get_text_from_url(url: str) -> str:
     pdf_bytes = get_pdf(url)
     png = convert_pdf_to_png(pdf_bytes)
     return convert_image_to_string(png)

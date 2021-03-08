@@ -1,4 +1,6 @@
 # Language Clustering of Statistical Learning Books
+[![Python 3.7.10](https://img.shields.io/badge/python-3.7.10-blue.svg)](https://www.python.org/downloads/release/python-360/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 > HDBSCAN (Hierarchical Density-Based Spatial Clustering of Applications with Noise) on the text of the canonical machine learning books "An Introduction to Statistical Learning" and "The Elements of Statistical Learning".
 
