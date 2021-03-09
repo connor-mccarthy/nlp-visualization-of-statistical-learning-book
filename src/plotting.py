@@ -54,6 +54,8 @@ def get_plot_df(
     clusterer: HDBSCAN,
     nouns: List[Token],
     add_noise: bool = True,
+    fit_noise=False,
+    transform_noise=True,
     dims=2,
     tsne=False,
     tsne_kwargs={},
@@ -63,9 +65,16 @@ def get_plot_df(
     vector = [noun.vector for noun in nouns]
     label = clusterer.labels_
     df = pd.DataFrame({"noun": noun, "vector": vector, "label": label})
-    df = add_pca_columns(df, dims=dims, tsne=tsne, tsne_kwargs={})
-    # max_duplicates = 2
-    # df = df.groupby("noun").head(max_duplicates)
+    df = add_pca_columns(
+        df,
+        dims=dims,
+        fit_noise=fit_noise,
+        transform_noise=transform_noise,
+        tsne=tsne,
+        tsne_kwargs={},
+    )
+    max_duplicates = 50
+    df = df.groupby("noun").head(max_duplicates)
     if add_noise:
         return add_noise_to_plot_df(df, dims)
     else:
