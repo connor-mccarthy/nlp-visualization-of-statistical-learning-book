@@ -15,7 +15,6 @@ def add_pca_columns(
     df: pd.DataFrame,
     fit_noise=False,
     transform_noise=True,
-    dims=2,
     tsne=False,
     tsne_kwargs={},
 ) -> pd.DataFrame:
@@ -30,125 +29,53 @@ def add_pca_columns(
         transform_vectors = fit_vectors
 
     if not tsne:
-        pca = PCA(n_components=dims)
+        pca = PCA(n_components=3)
         pca.fit(fit_vectors)
         new_dims = pca.transform(transform_vectors)
     else:
         pca = PCA(n_components=50)
         pca_dims = pca.fit(fit_vectors)
         pca_dims = pca.transform(transform_vectors)
-        tsne = TSNE(n_components=dims, perplexity=30, **tsne_kwargs)
+        tsne = TSNE(n_components=3, **tsne_kwargs)
         new_dims = tsne.fit_transform(pca_dims)
     if not transform_noise:
         df = df[df["label"] != -1]
 
-    if dims == 3:
-        df["x"], df["y"], df["z"] = new_dims[:, 0], new_dims[:, 1], new_dims[:, 2]
-    else:
-        df["x"], df["y"] = new_dims[:, 0], new_dims[:, 1]
-
+    df["x"], df["y"], df["z"] = new_dims[:, 0], new_dims[:, 1], new_dims[:, 2]
     return df
 
 
 def get_plot_df(
-    clusterer: HDBSCAN,
-    nouns: List[Token],
+    text: List[str],
+    vectors: List[np.array],
+    labels: List[int],
     add_noise: bool = True,
     fit_noise=False,
     transform_noise=True,
-    dims=2,
     tsne=False,
     tsne_kwargs={},
 ) -> pd.DataFrame:
-    assert dims in [2, 3]
-    noun = [noun.text for noun in nouns]
-    vector = [noun.vector for noun in nouns]
-    label = clusterer.labels_
-    df = pd.DataFrame({"noun": noun, "vector": vector, "label": label})
+    df = pd.DataFrame({"text": text, "vector": vectors, "label": labels})
     df = add_pca_columns(
         df,
-        dims=dims,
         fit_noise=fit_noise,
         transform_noise=transform_noise,
         tsne=tsne,
-        tsne_kwargs={},
+        tsne_kwargs=tsne_kwargs,
     )
     max_duplicates = 50
-    df = df.groupby("noun").head(max_duplicates)
+    df = df.groupby("text").head(max_duplicates)
     if add_noise:
-        return add_noise_to_plot_df(df, dims)
+        return add_noise_to_plot_df(df)
     else:
         return df
 
 
-def add_noise_to_plot_df(df: pd.DataFrame, dims: int) -> pd.DataFrame:
-    mu, sigma = 0, 0.05
-    if dims == 2:
-        noise = np.random.normal(mu, sigma, df[["x", "y"]].shape)
-        df[["x", "y"]] = df[["x", "y"]] + noise
-    if dims == 3:
-        noise = np.random.normal(mu, sigma, df[["x", "y", "z"]].shape)
-        df[["x", "y", "z"]] = df[["x", "y", "z"]] + noise
-
+def add_noise_to_plot_df(df: pd.DataFrame) -> pd.DataFrame:
+    mu, sigma = 0, 0.01
+    noise = np.random.normal(mu, sigma, df[["x", "y", "z"]].shape)
+    df[["x", "y", "z"]] = df[["x", "y", "z"]] + noise
     return df
-
-
-def plot2d(
-    df: pd.DataFrame,
-    plot_noise: bool = True,
-):
-
-    fig = go.Figure()
-
-    colors = px.colors.qualitative.Light24
-    color_index = 0
-    unique_labels = list(sorted(set(df["label"])))
-    for label in unique_labels:
-        if not plot_noise and label == -1:
-            continue
-        sub_df = df[df["label"] == label]
-
-        if label == -1:
-            color = "grey"
-            opacity = 0.1
-            name = "Noise"
-            hover_name = f"Topic {label}: {name}"
-        else:
-            try:
-                color = colors[color_index]
-                color_index += 1
-            except IndexError:
-                color_index = 0
-                color = colors[color_index]
-
-            opacity = None
-
-            frequency_list = sorted(
-                dict(Counter(sub_df["noun"].values)).items(), key=lambda x: x[1]
-            )
-            most_common = frequency_list[0][0]
-            name = f"Topic {label}: {most_common}"
-            hover_name = name
-
-        sub_df["hover_text"] = sub_df["noun"].apply(
-            lambda noun: f"{noun}<br>{hover_name}"
-        )
-
-        scatter_trace = go.Scatter(
-            x=sub_df["x"],
-            y=sub_df["y"],
-            mode="markers",
-            text=sub_df["hover_text"],
-            name=name,
-            meta=name,
-            hoverinfo="text",
-            showlegend=False,
-            marker=dict(color=color, opacity=opacity),
-        )
-        fig.add_trace(scatter_trace)
-
-    fig.layout.template = "plotly_white"
-    return fig
 
 
 def plot3d(
@@ -169,7 +96,6 @@ def plot3d(
             color = "grey"
             opacity = 0.1
             name = "Noise"
-            hover_name = f"Topic {label}: {name}"
         else:
             try:
                 color = colors[color_index]
@@ -180,23 +106,17 @@ def plot3d(
 
             opacity = None
 
-            frequency_list = sorted(
-                dict(Counter(sub_df["noun"].values)).items(), key=lambda x: x[1]
-            )
-            most_common = frequency_list[0][0]
-            name = f"Topic {label}: {most_common}"
-            hover_name = name
-
-        sub_df["hover_text"] = sub_df["noun"].apply(
-            lambda noun: f"{noun}<br>{hover_name}"
-        )
+            # frequency_list = sorted(
+            #     dict(Counter(sub_df["text"].values)).items(), key=lambda x: x[1]
+            # )
+            # most_common = frequency_list[0][0]
 
         scatter_trace = go.Scatter3d(
             x=sub_df["x"],
             y=sub_df["y"],
             z=sub_df["z"],
             mode="markers",
-            text=sub_df["hover_text"],
+            text=sub_df["text"],
             name=name,
             meta=name,
             hoverinfo="text",
@@ -213,4 +133,125 @@ def plot3d(
     )
     fig.update_layout(layout)
     fig.layout.template = "plotly_white"
+    return fig
+
+
+def add_rotation(fig):
+    x_eye = 0
+    y_eye = 1
+    z_eye = 0
+
+    fig.update_layout(
+        title="Animation Test",
+        width=600,
+        height=600,
+        scene_camera_eye=dict(x=x_eye, y=y_eye, z=z_eye),
+        updatemenus=[
+            dict(
+                type="buttons",
+                showactive=False,
+                y=1,
+                x=0.8,
+                xanchor="left",
+                yanchor="bottom",
+                pad=dict(t=45, r=10),
+                buttons=[
+                    dict(
+                        label="Play",
+                        method="animate",
+                        args=[
+                            None,
+                            dict(
+                                frame=dict(duration=5, redraw=True),
+                                transition=dict(duration=0),
+                                fromcurrent=True,
+                                mode="immediate",
+                            ),
+                        ],
+                    ),
+                    {
+                        "args": [
+                            [None],
+                            {
+                                "frame": {"duration": 0, "redraw": False},
+                                "mode": "immediate",
+                                "transition": {"duration": 0},
+                            },
+                        ],
+                        "label": "Pause",
+                        "method": "animate",
+                    },
+                ],
+            )
+        ],
+    )
+
+    def rotate_z(x, y, z, theta):
+        w = x + 1j * y
+        return np.real(np.exp(1j * theta) * w), np.imag(np.exp(1j * theta) * w), z
+
+    frames = []
+    for t in np.arange(0, 6.26, 0.005):
+        xe, ye, ze = rotate_z(x_eye, y_eye, z_eye, -t)
+        frames.append(go.Frame(layout=dict(scene_camera_eye=dict(x=xe, y=ye, z=ze))))
+
+    fig.frames = frames + frames
+    return fig
+
+
+def add_zoom(fig):
+    import numpy as np
+    import plotly.graph_objects as go
+
+    x_eye = 0
+    y_eye = 2
+    z_eye = 0
+
+    fig.update_layout(
+        title="Animation Test",
+        width=600,
+        height=600,
+        scene_camera_eye=dict(x=x_eye, y=y_eye, z=z_eye),
+        updatemenus=[
+            dict(
+                type="buttons",
+                showactive=False,
+                y=1,
+                x=0.8,
+                xanchor="left",
+                yanchor="bottom",
+                pad=dict(t=45, r=10),
+                buttons=[
+                    dict(
+                        label="Play",
+                        method="animate",
+                        args=[
+                            None,
+                            dict(
+                                frame=dict(duration=1, redraw=True),
+                                transition=dict(duration=0),
+                                fromcurrent=True,
+                                mode="immediate",
+                            ),
+                        ],
+                    )
+                ],
+            )
+        ],
+    )
+    frames = []
+    for i in np.arange(y_eye, 1, -0.05):
+        xe, ye, ze = x_eye, i, z_eye
+        frames.append(go.Frame(layout=dict(scene_camera_eye=dict(x=xe, y=ye, z=ze))))
+
+    y_eye = i
+
+    def rotate_z(x, y, z, theta):
+        w = x + 1j * y
+        return np.real(np.exp(1j * theta) * w), np.imag(np.exp(1j * theta) * w), z
+
+    for t in np.arange(0, 6.26, 0.001):
+        xe, ye, ze = rotate_z(x_eye, y_eye, z_eye, -t)
+        frames.append(go.Frame(layout=dict(scene_camera_eye=dict(x=xe, y=ye, z=ze))))
+    fig.frames = frames
     return fig

@@ -75,3 +75,7 @@ def get_text_from_url(url: str) -> str:
     pdf_bytes = get_pdf(url)
     png = convert_pdf_to_png(pdf_bytes)
     return convert_image_to_string(png)
+
+
+if __name__ == "__main__":
+    get_pdf("https://web.stanford.edu/~hastie/Papers/ESLII.pdf")
