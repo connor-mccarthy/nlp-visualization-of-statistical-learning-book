@@ -1,7 +1,5 @@
-# %%
 import os
 
-import plotly.graph_objects as go
 from joblib import Memory
 
 from clustering import cluster_topics
@@ -26,8 +24,6 @@ def main() -> None:
         vectors=vectors,
         labels=clusterer.labels_,
         add_vibration=False,
-        fit_noise=False,
-        transform_noise=True,
         use_tsne=True,
         tsne_kwargs=dict(perplexity=30),
     )
@@ -38,6 +34,7 @@ def main() -> None:
 
     fig.write_html(os.path.join(current_dir, "..", "figure.html"))
     fig.write_json(os.path.join(current_dir, "..", "figure.json"))
+    fig.write_image(os.path.join(current_dir, "..", "figure.png"))
 
 
 if __name__ == "__main__":

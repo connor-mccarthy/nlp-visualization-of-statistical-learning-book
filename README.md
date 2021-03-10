@@ -3,20 +3,20 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
-[_The Elements of Statistical Learning_](https://web.stanford.edu/~hastie/Papers/ESLII.pdf) is the more technical treatment of similar topics.
+This project uses unsupervised learning to visualize the text of the canonical machine learning book [_The Elements of Statistical Learning_](https://web.stanford.edu/~hastie/Papers/ESLII.pdf).
 
+The book is represented with GloVe embeddings, clustered with HDBSCAN, and visualized with t-SNE.
 
+See the [HTML figure](./figure.html) to explore.
 
-This repository contains code and figures related to an statistical investigation of both books using the HDBSCAN clustering algorithm.
-
-
-Pipeline steps:
-1) Make HTTP request to get data
-2) Convert PDF to array of PNGs
-3) Use Pytesseract OCR to convert image to text
-4) Rule based pipeline to extract n-grams of theoretically unlimited length n if rules are met
-5) Map tokens to GloVe embeddings, averaging across spans
-6) Norm embeddings
+## Pipeline steps:
+1) Make HTTP request to obtain PDF
+2) Convert single PDF file to array of PNG files
+3) Use OCR to convert image to text
+4) Apply rule-based pipeline to extract n-grams of theoretically unlimited length n if rules are met for all tokens in n-gram
+5) Map tokens to GloVe embeddings (averaging where n-gram has n > 1)
+6) Normalize vector embeddings
 7) Cluster using HDBSCAN
-8) Reduce dimensionality with PCA from 300dims --> 50dims
-9) Reduce dimensionality with t-SNE from 50dims --> 3dims
+8) Reduce dimensionality with PCA from dimensions (300,) --> (50,) for computational efficiency in subsequent t-SNE step
+9) Reduce dimensionality further with t-SNE from dimensions (50,) --> (3,)
+10) Plot vectors
