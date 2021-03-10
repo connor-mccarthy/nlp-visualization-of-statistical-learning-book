@@ -5,7 +5,7 @@
 
 This project uses unsupervised learning to visualize the text of the canonical machine learning book [_The Elements of Statistical Learning_](https://web.stanford.edu/~hastie/Papers/ESLII.pdf).
 
-The book is represented with GloVe embeddings, clustered with HDBSCAN, and visualized with t-SNE.
+The pipeline represents the text of the book with GloVe embeddings, clusters it with HDBSCAN, and visualizes it with t-SNE.
 
 See the [HTML figure](./figure.html) to explore.
 
