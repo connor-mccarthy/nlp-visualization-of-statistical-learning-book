@@ -55,14 +55,6 @@ def convert_image_to_string(png_bytes: bytes) -> str:
     return " ".join(page_list)
 
 
-def write_text_to_txt(text: str, file: str) -> None:
-    current_directory = os.path.dirname(os.path.abspath(__file__))
-    filepath = os.path.join(current_directory, file)
-    with open(filepath, "w+") as f:
-        f.write(text)
-    print(f"Text written to {filepath}.")
-
-
 def read_text_from_txt(file: str) -> str:
     current_directory = os.path.dirname(os.path.abspath(__file__))
     filepath = os.path.join(current_directory, file)

@@ -1,17 +1,12 @@
-from typing import Dict, List
+from typing import Any, Dict, List
 
 import numpy as np
 from hdbscan import HDBSCAN
-from spacy.tokens.token import Token
 
 
 def cluster_topics(
-    vectors: List[np.array], clustering_params: Dict[str, str]
+    vectors: List[np.ndarray], clustering_params: Dict[str, Any]
 ) -> HDBSCAN:
     clusterer = HDBSCAN(**clustering_params)
     clusterer.fit(vectors)
     return clusterer
-
-
-def convert_tokens_to_vector_df(nouns: List[Token]) -> List[np.ndarray]:
-    return [noun.vector for noun in nouns]
