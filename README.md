@@ -1,9 +1,9 @@
-# Language Clustering of Statistical Learning Books
+# NLP and Unsupervised Learning of Statistical Learning Book
 [![Python 3.7.10](https://img.shields.io/badge/python-3.7.10-blue.svg)](https://www.python.org/downloads/release/python-360/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
-This project uses unsupervised learning to visualize the text of the canonical machine learning book [_The Elements of Statistical Learning_](https://web.stanford.edu/~hastie/Papers/ESLII.pdf).
+This project uses NLP and unsupervised learning to visualize the text of the canonical machine learning book [_The Elements of Statistical Learning_](https://web.stanford.edu/~hastie/Papers/ESLII.pdf).
 
 The pipeline represents the text of the book with GloVe embeddings, clusters it with HDBSCAN, and visualizes it with t-SNE.
 
