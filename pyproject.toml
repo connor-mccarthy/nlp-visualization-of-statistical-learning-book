@@ -6,12 +6,21 @@ authors = ["Connor McCarthy <mccarthy.connor.james@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.7.1,<4.0"
+requests = "^2.25.1"
+sklearn = "^0.0"
+pdf2image = "^1.14.0"
 plotly = "^4.14.3"
-pytesseract = "^0.3.7"
-pandas = "^1.2.2"
+Pillow = "^8.1.2"
+numpy = "^1.20.1"
+pandas = "^1.2.3"
+spacy = "^3.0.3"
 hdbscan = "^0.8.27"
-scikit-learn = "^0.24.1"
-spacy = "^3.0.1"
+ipython = "^7.21.0"
+ipykernel = "^5.5.0"
+pytesseract = "^0.3.7"
+en-core-web-lg = {url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-2.3.1/en_core_web_lg-2.3.1.tar.gz"}
+nbformat = "^5.1.2"
+nltk = "^3.5"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.4"
