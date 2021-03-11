@@ -1,7 +1,13 @@
-# 📙 NLP and Data Viz Pipeline with GloVe, HDBSCAN, and t-SNE
-[![Python 3.7.10](https://img.shields.io/badge/python-3.7.10-blue.svg)](https://www.python.org/downloads/release/python-360/)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-
+<div align="center">
+  <h1>📙 NLP and Data Viz Pipeline with GloVe, HDBSCAN, and t-SNE</h1>
+<p align="center">
+<a href="https://img.shields.io/badge/python-3.7.10-blue.svg">
+    <img src="https://img.shields.io/badge/python-3.7.10-blue.svg" alt="Python 3.7.10" />
+</a>
+<a href="https://img.shields.io/badge/code%20style-black-000000.svg">
+    <img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black" >
+</a>
+</div>
 
 This project uses NLP and unsupervised learning to visualize the text of the canonical machine learning book [_The Elements of Statistical Learning_](https://web.stanford.edu/~hastie/Papers/ESLII.pdf).
 
