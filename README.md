@@ -30,3 +30,5 @@ The pipeline represents the text of the book with GloVe embeddings, clusters it 
 8) Reduce dimensionality with PCA from dimensions (300,) --> (50,) for computational efficiency in subsequent t-SNE step
 9) Reduce dimensionality further with t-SNE from dimensions (50,) --> (3,)
 10) Plot vectors
+
+[![Analytics](https://ga-beacon.appspot.com/G-9XBP8WY13K/welcome-page)](https://github.com/connor-mccarthy/nlp-visualization-of-statistical-learning-book)
