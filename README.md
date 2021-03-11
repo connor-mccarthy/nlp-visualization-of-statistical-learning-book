@@ -11,9 +11,13 @@
 
 This project uses NLP and unsupervised learning to visualize the text of the canonical machine learning book [_The Elements of Statistical Learning_](https://web.stanford.edu/~hastie/Papers/ESLII.pdf).
 
+<div>
+<p align="center"><a href='https://connor-mccarthy.github.io/nlp-visualization-of-statistical-learning-book/figure.html'>Click here</a> to explore the data yourself.</p>
+
+<div>
+
 The pipeline represents the text of the book with GloVe embeddings, clusters it with HDBSCAN, and visualizes it with t-SNE.
 
-See the [HTML figure](./figure.html) to explore.
 
 ## Pipeline steps:
 1) Make HTTP request to obtain PDF
