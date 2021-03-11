@@ -31,4 +31,4 @@ The pipeline represents the text of the book with GloVe embeddings, clusters it 
 9) Reduce dimensionality further with t-SNE from dimensions (50,) --> (3,)
 10) Plot vectors
 
-[![Analytics](https://ga-beacon.appspot.com/G-9XBP8WY13K/welcome-page)](https://github.com/connor-mccarthy/nlp-visualization-of-statistical-learning-book)
+[![Analytics](https://ga-beacon.appspot.com/UA-187472349-1/welcome-page)](https://github.com/connor-mccarthy/nlp-visualization-of-statistical-learning-book)
